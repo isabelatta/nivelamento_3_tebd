@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Faculdade</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_new">Nova Disciplina</string>
+    <string name="action_update">Editar Disciplina</string>
+    <string name="action_delete">Apagar Disciplina</string>
+    <string name="title_activity_disciplina">DisciplinaActivity</string>
+</resources>
