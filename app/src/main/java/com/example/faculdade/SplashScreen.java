@@ -13,7 +13,9 @@ import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -99,17 +101,35 @@ public class SplashScreen extends Activity {
         try {
             // Create connection to send GCM Message request.
 //            URL url1 = new URL("http://www.ictios.com.br/emjorge/appfaculdade/"+ "index1.php");
-            URL url1 = new URL("https://api.myjson.com/bins/7xv8a");
+            URL url1 = new URL("https://api.myjson.com/bins/oywoa");
+            BufferedReader reader = null;
             HttpURLConnection conn = (HttpURLConnection) url1.openConnection();
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setRequestMethod("GET");
+
+            conn.connect();
+
+            InputStream stream = conn.getInputStream();
+
+            reader = new BufferedReader(new InputStreamReader(stream));
+
+            StringBuffer buffer = new StringBuffer();
+            String line = "";
+
+            while ((line = reader.readLine()) != null) {
+                buffer.append(line+"\n");
+                Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
+
+            }
+
+            json = new JSONObject(buffer.toString());
+/*            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestMethod("POST");
             conn.setDoOutput(true);
             // Read GCM response.
             InputStream inputStream = conn.getInputStream();
             resp = IOUtils.toString(inputStream);
             json = new JSONObject(resp);
 
-            Log.i("Teste", json.toString());
+            Log.i("Teste", json.toString());*/
             return json;
         }catch (Exception e){
             e.printStackTrace();
