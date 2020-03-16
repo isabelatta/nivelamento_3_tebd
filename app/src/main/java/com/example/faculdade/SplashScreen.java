@@ -60,20 +60,21 @@ public class SplashScreen extends Activity {
         protected JSONObject doInBackground(String... args) {
             JSONObject json = null;
 
-            DisciplinaDAO disciplinaDAO = new DisciplinaDAO(SplashScreen.this);
-            disciplinaDAO.dropAll();
+            AutorDAO autorDAO = new AutorDAO(SplashScreen.this);
+            autorDAO.dropAll();
             JSONArray link = null;
             json = Json();
-            int count = 0;
             try {
                 // Getting JSON Array
-                link = json.getJSONArray("Lista");
+                link = json.getJSONArray("data");
                 for (int i = 0; i < link.length(); i++) {
                     JSONObject c = link.getJSONObject(i);
-                    DisciplinaValue disciplinaValue = new DisciplinaValue();
-                    disciplinaValue.setDisciplina(c.getString("disciplina"));
-                    disciplinaDAO.salvar(disciplinaValue);
-                    disciplinaDAO.close();
+                    JSONObject autor = c.getJSONObject("autor");
+                    AutorValue autorValue = new AutorValue();
+                    autorValue.setNome(autor.getString("nome"));
+                    autorValue.setEndereco(autor.getString("endereco"));
+                    autorDAO.salvar(autorValue);
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -99,9 +100,7 @@ public class SplashScreen extends Activity {
         JSONObject json = null;
         String resp=null;
         try {
-            // Create connection to send GCM Message request.
-//            URL url1 = new URL("http://www.ictios.com.br/emjorge/appfaculdade/"+ "index1.php");
-            URL url1 = new URL("https://api.myjson.com/bins/oywoa");
+            URL url1 = new URL("http://192.168.0.13:3000/api/mobile/1");
             BufferedReader reader = null;
             HttpURLConnection conn = (HttpURLConnection) url1.openConnection();
 
@@ -116,20 +115,10 @@ public class SplashScreen extends Activity {
 
             while ((line = reader.readLine()) != null) {
                 buffer.append(line+"\n");
-                Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
 
             }
 
             json = new JSONObject(buffer.toString());
-/*            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-            // Read GCM response.
-            InputStream inputStream = conn.getInputStream();
-            resp = IOUtils.toString(inputStream);
-            json = new JSONObject(resp);
-
-            Log.i("Teste", json.toString());*/
             return json;
         }catch (Exception e){
             e.printStackTrace();
